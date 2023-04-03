@@ -33,6 +33,10 @@ private:
 class TrafficLight : public TrafficObject
 {
 public:
+    enum TrafficLightPhase {
+        red, 
+        green,
+    };
     // constructor / desctructor
     TrafficLight();
     ~TrafficLight();
@@ -40,16 +44,12 @@ public:
     // getters / setters
     void WaitForGreen();
     void simulate();
-    TrafficLightPhase getCurrentPhase();
 
     // typical behaviour methods
+    TrafficLightPhase getCurrentPhase();
 
 private:
     // typical behaviour methods
-    enum TrafficLightPhase {
-        red, 
-        green,
-    };
     TrafficLightPhase _currentPhase;
     void cycleThroughPhases();
 
