@@ -30,17 +30,28 @@ private:
 // can be either „red“ or „green“. Also, add the private method „void cycleThroughPhases()“. 
 // Furthermore, there shall be the private member _currentPhase which can take „red“ or „green“ as its value. 
 
-class TrafficLight
+class TrafficLight : public TrafficObject
 {
 public:
     // constructor / desctructor
+    TrafficLight();
+    ~TrafficLight();
 
     // getters / setters
+    void WaitForGreen();
+    void simulate();
+    TrafficLightPhase getCurrentPhase();
 
     // typical behaviour methods
 
 private:
     // typical behaviour methods
+    enum TrafficLightPhase {
+        red, 
+        green,
+    };
+    TrafficLightPhase _currentPhase;
+    void cycleThroughPhases();
 
     // FP.4b : create a private member of type MessageQueue for messages of type TrafficLightPhase 
     // and use it within the infinite loop to push each new TrafficLightPhase into it by calling 
