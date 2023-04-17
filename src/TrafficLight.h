@@ -19,8 +19,21 @@ template <class T>
 class MessageQueue
 {
 public:
+    void send(TrafficLightPhase&& phase) {
+        _queue.push_back(phase);
+    }
+
+    TrafficLightPhase receive() {
+        TrafficLightPhase tlp = _queue.back();
+        _queue.pop_back();
+
+        return tlp;
+    }
 
 private:
+    std::dequeue<TrafficLightPhase> _queue;
+    std::mutex _mutex;
+    std::condition_variable _cond;
     
 };
 
@@ -30,19 +43,20 @@ private:
 // can be either „red“ or „green“. Also, add the private method „void cycleThroughPhases()“. 
 // Furthermore, there shall be the private member _currentPhase which can take „red“ or „green“ as its value. 
 
-class TrafficLight : public TrafficObject
-{
-public:
-    enum TrafficLightPhase {
+enum TrafficLightPhase {
         red, 
         green,
     };
+
+class TrafficLight : public TrafficObject
+{
+public:
     // constructor / desctructor
     TrafficLight();
     ~TrafficLight();
 
     // getters / setters
-    void WaitForGreen();
+    void waitForGreen();
     void simulate();
 
     // typical behaviour methods
@@ -57,6 +71,7 @@ private:
     // and use it within the infinite loop to push each new TrafficLightPhase into it by calling 
     // send in conjunction with move semantics.
 
+    MessageQueue<TrafficLightPhase> _messageQueue;
     std::condition_variable _condition;
     std::mutex _mutex;
 };
