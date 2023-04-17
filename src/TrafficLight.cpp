@@ -23,7 +23,7 @@ void MessageQueue<T>::send(T &&msg)
 
 /* Implementation of class "TrafficLight" */
 
-/* 
+
 TrafficLight::TrafficLight()
 {
     _currentPhase = TrafficLightPhase::red;
@@ -59,12 +59,17 @@ void TrafficLight::cycleThroughPhases()
     auto start = std::chrono::high_resolution_clock::now();
     while(true)
     {
-        auto end = std::chrono::high_resolution_clock::now();
-        auto duration = end - start;
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
+        
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        if (duration.count() >= distr(gen)) {
+            _currentPhase = 
+                (_currentPhase == TrafficLightPhase::red) ? TrafficLightPhase::green : TrafficLightPhase::red;
+        };
+        
+        auto p = _currentPhase;
+        _messageQueue.send(std::move(p));
         end = start;
     }
 }
-
-*/
